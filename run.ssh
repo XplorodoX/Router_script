@@ -1,17 +1,5 @@
 #!/bin/bash
 
-#eingabe des wlan name
-echo "Bitte geben sie den Namen des WLANs ein:"
-read wlan
-#in hostapd eintragen bei ssid
-sudo sed -i "s/ssid=WLANrouter/ssid=$wlan/g" config/hostapd.conf
-
-#eingabe des wlan passwort
-echo "Bitte geben sie das Passwort des WLANs ein:"
-read pass
-#in hostapd eintragen bei wpa_passphrase
-sudo sed -i "s/wpa_passphrase=12345678/wpa_passphrase=$pass/g" config/hostapd.conf
-
 sudo apt update
 sudo apt install dnsmasq hostapd iptables
 
