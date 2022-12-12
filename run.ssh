@@ -4,25 +4,22 @@ sudo apt update
 sudo apt install dnsmasq hostapd iptables
 
 # Configure the wireless interface
-sudo mv /etc/dhcpcd.conf /etc/dhcpcd.conf.orig
 sudo cp config/dhcpcd.conf /etc/dhcpcd.conf
 sudo systemctl restart dhcpcd
 
 # Configure the access point
 sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf_alt
 sudo cp config/dnsmasq.conf /etc/dnsmasq.conf
+
+# neustarten
 sudo systemctl restart dnsmasq
-sudo systemctl status dnsmasq
 sudo systemctl enable dnsmasq
 
 # Configure the access point
-sudo mv /etc/hostapd/hostapd.conf /etc/hostapd/hostapd.conf_alt
 sudo cp config/hostapd.conf /etc/hostapd/hostapd.conf
 sudo chmod 600 /etc/hostapd/hostapd.conf
 
 sudo sed -i 's/#DAEMON_CONF=""/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/g' /etc/default/hostapd
-
-#Linie "RUN_DAEMON=yes" hinzufügen zu /etc/default/hostapd
 sudo echo RUN_DAEMON=yes | sudo tee -a /etc/default/hostapd
 
 sudo systemctl unmask hostapd
