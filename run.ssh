@@ -10,15 +10,16 @@ sudo sed -i 's/#dtoverlay=disable-bt/dtoverlay=disable-bt/' /boot/config.txt
 sudo cp config/98-my.rules /etc/udev/rules.d/98-my.rules
 chmod 600 /etc/udev/rules.d/98-my.rules
 
-# Configure the wireless interface
-sudo cp config/dhcpcd.conf /etc/dhcpcd.conf
-chmod 600 /etc/dhcpcd.conf
+sudo echo 'interface wlan0' > /etc/dhcpcd.conf
+sudo echo'static ip_address=192.168.1.1/24' > /etc/dhcpcd.conf
+sudo sed -i 'nohook wpa_supplicant' > /etc/dhcpcd.conf
 sudo systemctl restart dhcpcd
 
 # Configure the access point
-sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf_alt
-sudo cp config/dnsmasq.conf /etc/dnsmasq.conf
-chmod 600 /etc/dnsmasq.conf
+sudo echo 'interface=wlan0' > /etc/dnsmasq.conf
+sudo echo 's/#no-dhcp-interface=eth0/no-dhcp-interface=eth0/' > /etc/dnsmasq.conf
+sudo echo'dhcp-range=192.168.1.100,192.168.1.200,255.255.255.0,24h/' > /etc/dnsmasq.conf
+sudo echo 'dhcp-option=option:dns-server,192.168.1.1/' > /etc/dnsmasq.conf
 
 sudo systemctl restart dnsmasq
 sudo systemctl enable dnsmasq
